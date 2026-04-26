@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { SimulationContext } from '../context/SimulationContext';
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, CartesianGrid } from 'recharts';
-import { Heart, Wind, AlertTriangle, Activity, Clock } from 'lucide-react';
+import { Heart, Wind, AlertTriangle, Clock } from 'lucide-react'; // Removed Activity import here
 import CircularProgress from '../components/CircularProgress';
 import TelemetryLog from '../components/TelemetryLog';
 import MiniFatigueGraph from '../components/MiniFatigueGraph';
@@ -42,9 +42,13 @@ export default function DashboardPage() {
               <AlertTriangle size={16} /> Scenario: {scenario}
             </div>
           )}
-          <div className="btn" style={{ borderColor: status.color, color: status.color, cursor: 'default', backgroundColor: status.bg }}>
-            <Activity size={18} /> {status.text}
+          
+          {/* Status Badge - Replaced logo icon with a clean glowing dot */}
+          <div className="btn status-badge" style={{ borderColor: status.color, color: status.color, cursor: 'default', backgroundColor: status.bg }}>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: status.color, boxShadow: `0 0 6px ${status.color}` }} /> 
+            {status.text}
           </div>
+
         </div>
       </div>
 

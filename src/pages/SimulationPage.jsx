@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { SimulationContext } from '../context/SimulationContext';
-import { Play, Square, RotateCcw, Bike, Waves, Dumbbell, PersonStanding, Thermometer, BatteryWarning, HeartCrack, Cpu, Target, CheckCircle } from 'lucide-react';
+/* Updated Icons: Added Footprints and Flame */
+import { Play, Square, RotateCcw, Bike, Waves, Dumbbell, Footprints, Flame, Thermometer, BatteryWarning, HeartCrack, Cpu, CheckCircle } from 'lucide-react';
 import VitalsPod from '../components/VitalsPod';
 import './SimulationPage.css';
 
@@ -11,11 +12,11 @@ export default function SimulationPage() {
   } = useContext(SimulationContext);
 
   const workouts = [
-    { name: 'Running', icon: <PersonStanding size={18} /> },
+    { name: 'Running', icon: <Footprints size={18} /> },
     { name: 'Cycling', icon: <Bike size={18} /> },
     { name: 'Swimming', icon: <Waves size={18} /> },
     { name: 'Gym', icon: <Dumbbell size={18} /> },
-    { name: 'Calisthenics', icon: <Target size={18} /> } 
+    { name: 'Calisthenics', icon: <Flame size={18} /> } 
   ];
   const phases = ['Warm-up', 'Active', 'Peak', 'Cooldown'];
   const scenarios = [
@@ -26,7 +27,7 @@ export default function SimulationPage() {
   ];
   const intensityLevels = [{ label: 'Low', val: 25 }, { label: 'Medium', val: 50 }, { label: 'High', val: 75 }, { label: 'Max', val: 100 }];
 
-  const fillPercentage = ((intensity - 10) / (100 - 10)) * 100;
+  const fillPercentage = ((intensity - 10) / 90) * 100;
 
   return (
     <div className="page-container hide-scrollbar">
@@ -68,24 +69,30 @@ export default function SimulationPage() {
                 max="100" 
                 value={intensity} 
                 onChange={(e) => setIntensity(Number(e.target.value))} 
-                style={{
-                  background: `linear-gradient(to right, var(--primary) ${fillPercentage}%, rgba(0,0,0,0.05) ${fillPercentage}%)`
-                }}
+                style={{ background: `linear-gradient(to right, var(--primary) ${fillPercentage}%, rgba(0,0,0,0.05) ${fillPercentage}%)` }}
               />
             </div>
 
             <div className="slider-labels">
-              {intensityLevels.map(level => (
-                <span key={level.label} className={`slider-label ${intensity >= level.val - 10 && intensity <= level.val + 10 ? 'active' : ''}`} onClick={() => setIntensity(level.val)}>
-                  {level.label}
-                </span>
-              ))}
+              {intensityLevels.map(level => {
+                // Mathematically calculate the exact percentage based on the 10-100 range
+                const positionPercent = ((level.val - 10) / 90) * 100;
+                return (
+                  <span 
+                    key={level.label} 
+                    className={`slider-label ${intensity >= level.val - 10 && intensity <= level.val + 10 ? 'active' : ''}`} 
+                    onClick={() => setIntensity(level.val)}
+                    style={{ left: `${positionPercent}%`, transform: 'translateX(-50%)' }}
+                  >
+                    {level.label}
+                  </span>
+                );
+              })}
             </div>
           </div>
 
           <div>
             <h3 className="retro-heading control-header">Emergency Scenarios</h3>
-            {/* Strict 2x2 Grid Layout for Scenarios */}
             <div className="button-grid-2x2">
               {scenarios.map(s => (
                 <button key={s.name} className={`btn ${scenario === s.name ? (s.name === 'Normal' ? 'active btn-primary' : 'active btn-danger') : ''}`} onClick={() => setScenario(s.name)}>
